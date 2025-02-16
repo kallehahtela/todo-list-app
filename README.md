@@ -10,4 +10,4 @@
 
 # Documentation
 
-[[https://react.dev/reference/react/createContext](https://legacy.reactjs.org/docs/context.html)](https://legacy.reactjs.org/docs/context.html)
+https://legacy.reactjs.org/docs/context.html
