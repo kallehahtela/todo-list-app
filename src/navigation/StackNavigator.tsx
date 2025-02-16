@@ -24,7 +24,12 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 const RootStack = () => {
     return (
         // Bottom Tab will be the very first screen to render
-        <Stack.Navigator initialRouteName='BottomTabs'>
+        <Stack.Navigator 
+            initialRouteName='BottomTabs'
+            screenOptions={{
+                headerShown: false,
+            }}
+        >
             <Stack.Screen 
                 name='BottomTabs'
                 component={BottomTabs}
