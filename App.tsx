@@ -6,14 +6,17 @@ import RootStack from './src/navigation/StackNavigator';
 
 // Context
 import { TaskProvider } from './src/store/TaskContext';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 export default function App() {
   return (
-    <TaskProvider>
-      <NavigationContainer>
-          <StatusBar style='dark' />
-          <RootStack />
-      </NavigationContainer>
-    </TaskProvider>
+    <GestureHandlerRootView>
+      <TaskProvider>
+        <NavigationContainer>
+            <StatusBar style='dark' />
+            <RootStack />
+        </NavigationContainer>
+      </TaskProvider>
+    </GestureHandlerRootView>
   );
 }
