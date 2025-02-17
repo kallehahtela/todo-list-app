@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { View, Text, StyleSheet, TouchableWithoutFeedback, Keyboard, TextInput, Alert, TouchableOpacity } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
@@ -10,22 +10,30 @@ import { Ionicons } from '@expo/vector-icons';
 // Custom Components
 import UIButton from "../ui/UIButton";
 import ReusableModal from "./ReusableModal";
+import { TaskContext } from "../store/TaskContext";
 
 type Props = NativeStackScreenProps<RootStackParamList, 'AddingScreen'>;
 
 const AddingScreen = ({ route, navigation }: Props) => {
-    const [task, setTask] = useState("");
     const [modalVisible, setModalVisible] = useState(false);
+    const [title, setTitle] = useState('');
+    const taskContext = useContext(TaskContext)
 
-    // Currently just checks the implemntation and makes a log
+    if (!taskContext) {
+        return null; // Safety check
+    }
+
+    const { addTask } = taskContext;
+
     const handleAddTask = () => {
-        if (!task.trim()) {
-            Alert.alert("Task cannot be empty!", "Please enter a valid task.");
-            return;
+        if (title.trim() !== '') {
+            // Add tasks to context
+            addTask(title);
+            // Clear input
+            setTitle('');
+            // Go back to HomeScreen
+            navigation.goBack();
         }
-        // Implement Adding to a list here
-        console.log("Added Task:", task);
-        setTask(""); // Clear input after adding
     };
 
     return (
@@ -91,8 +99,8 @@ const AddingScreen = ({ route, navigation }: Props) => {
                         <TextInput
                             style={styles.input}
                             placeholder="Add a todo"
-                            value={task}
-                            onChangeText={setTask}
+                            value={title}
+                            onChangeText={setTitle}
                         />
                     </View>
 

@@ -1,6 +1,12 @@
-import React, { useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
-import { SafeAreaProvider } from "react-native-safe-area-context";
+import React, { useState, useContext } from "react";
+import { 
+    View, 
+    Text, 
+    StyleSheet, 
+    TouchableOpacity, 
+    FlatList 
+} from 'react-native';
+import { SafeAreaView } from "react-native-safe-area-context";
 
 // Navgation & Icons
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
@@ -9,22 +15,23 @@ import { AntDesign, Ionicons } from '@expo/vector-icons';
 
 // Custom Files
 import ReusableModal from "./ReusableModal";
+import { TaskContext } from "../store/TaskContext";
+import colors from "../constants/colors";
 
 type Props = NativeStackScreenProps<RootStackParamList, 'HomeScreen'>;
 
-type Task = {
-    id: string;
-    title: string;
-    tasks: string[];
-    completed: boolean;
-};
-
 const HomeScreen = ({ route, navigation}: Props) => {
-    const [task, setTask] = useState<Task[]>([]);
     const [modalVisible, setModalVisible] = useState(false);
+    const taskContext = useContext(TaskContext);
+
+    if (!taskContext) {
+        return null; // Safety check
+    }
+
+    const { tasks } = taskContext;
 
     return (
-        <SafeAreaProvider style={styles.outerContainer}>
+        <SafeAreaView style={styles.outerContainer}>
             <View style={styles.innerContainer}>
                 {/* Modal Implement */}
                 <ReusableModal 
@@ -59,7 +66,7 @@ const HomeScreen = ({ route, navigation}: Props) => {
                     />
                 </TouchableOpacity>
                 {
-                    task.length === 0 ? (
+                    tasks.length === 0 ? (
                         <View>
                             {/* Icon and Welcome Text */}
                             <View style={styles.noneTasks}>
@@ -76,7 +83,7 @@ const HomeScreen = ({ route, navigation}: Props) => {
                             {/* Text display for indicating we don't have todos */}
                             <View style={styles.infoContainer}>
                                 <Text style={styles.infoText}>
-                                    No todos found. Start by adding one!,
+                                    No todos found. Start by adding one!
                                 </Text>
                                 <Text 
                                     style={[styles.infoText, styles.textGap]}
@@ -86,16 +93,19 @@ const HomeScreen = ({ route, navigation}: Props) => {
                             </View>
                         </View>
                     ) : (
-                        <FlatList 
-                            data={task}
+                        <FlatList
+                            contentContainerStyle={styles.flatList} 
+                            data={tasks}
                             keyExtractor={item => item.id.toString()}
                             renderItem={({ item }) => (
                                 <TouchableOpacity
-                                
+                                    style={styles.taskCard}
                                 >
-                                    <Text>{item.title}</Text>
-                                    <Text>{item.tasks}</Text>
-                                    <Text>{item.completed}</Text>
+                                    <Text
+                                        style={styles.taskText}
+                                    >
+                                        {item.title}
+                                    </Text>
                                 </TouchableOpacity>
                             )}
                         >
@@ -104,7 +114,7 @@ const HomeScreen = ({ route, navigation}: Props) => {
                     )
                 }
             </View>
-        </SafeAreaProvider>
+        </SafeAreaView>
     );
 }
 
@@ -122,7 +132,7 @@ const styles = StyleSheet.create({
     iconContainer: {
         position: 'absolute',
         right: 20,
-        top: 80,
+        top: 20,
     },
     noneTasks: {
         flexDirection: 'row',
@@ -144,5 +154,23 @@ const styles = StyleSheet.create({
     },
     textGap: {
         marginTop: 5,
+    },
+    flatList: {
+        marginTop: 80,
+        width: '100%',
+        gap: 20,
+    },
+    taskCard: {
+        backgroundColor: colors.primary,
+        borderRadius: 10,
+        padding: 10,
+        width: 200,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    taskText: {
+        color: colors.btnText,
+        fontWeight: '700',
+        fontSize: 17,
     }
 });
