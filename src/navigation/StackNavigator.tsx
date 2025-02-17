@@ -9,13 +9,14 @@ import AddingScreen from '../Screens/AddingScreen';
 import EditScreen from '../Screens/EditScreen';
 import CompletedScreen from '../Screens/CompletedScreen';
 import BottomTabs from './BottomTabNavigator';
+import { Task } from '../store/TaskContext';
 
 // Types for TypeScript to handle navigation
 export type RootStackParamList = {
     BottomTabs: undefined;
     HomeScreen: undefined;
     AddingScreen: undefined;
-    EditScreen: undefined;
+    EditScreen: { task: Task };
     CompletedScreen: undefined;
 };
 
@@ -48,6 +49,11 @@ const RootStack = () => {
             <Stack.Screen 
                 name='EditScreen'
                 component={EditScreen}
+                options={{
+                    presentation: 'modal',
+                    headerShown: true,
+                    title: 'Edit todo',
+                }}
             />
 
             <Stack.Screen 

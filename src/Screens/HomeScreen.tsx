@@ -15,8 +15,10 @@ import { AntDesign, Ionicons } from '@expo/vector-icons';
 
 // Custom Files
 import ReusableModal from "./ReusableModal";
-import { TaskContext } from "../store/TaskContext";
 import colors from "../constants/colors";
+
+// Context
+import { TaskContext, Task } from "../store/TaskContext";
 
 type Props = NativeStackScreenProps<RootStackParamList, 'HomeScreen'>;
 
@@ -99,6 +101,13 @@ const HomeScreen = ({ route, navigation}: Props) => {
                             keyExtractor={item => item.id.toString()}
                             renderItem={({ item }) => (
                                 <TouchableOpacity
+                                    onPress={() =>
+                                        navigation.navigate(
+                                            'EditScreen', {
+                                                task: item 
+                                            }
+                                        )
+                                    }
                                     style={styles.taskCard}
                                 >
                                     <Text
@@ -161,7 +170,7 @@ const styles = StyleSheet.create({
         gap: 20,
     },
     taskCard: {
-        backgroundColor: colors.primary,
+        backgroundColor: colors.todo,
         borderRadius: 10,
         padding: 10,
         width: 200,

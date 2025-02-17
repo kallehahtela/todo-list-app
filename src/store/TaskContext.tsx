@@ -10,6 +10,7 @@ export type Task = {
 type TaskContextType = {
     tasks: Task[];
     addTask: (title: string) => void;
+    editTask: (id: number, newTitle: string) => void; 
 };
 
 // Create Context with default empty values
@@ -32,9 +33,19 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
         setTasks((prevTasks) => [...prevTasks, newTask]);
     };
 
+    // Function to edit an existing task
+    const editTask = (id: number, newTitle: string) => {
+    setTasks((prevTask) => 
+        prevTask.map((task) => 
+            task.id === id ? {
+                ...task, title: newTitle } : task
+            )
+        );
+    };
+
     return (
         <TaskContext.Provider
-            value={{ tasks, addTask }}
+            value={{ tasks, addTask, editTask }}
         >
             {children}
         </TaskContext.Provider>
