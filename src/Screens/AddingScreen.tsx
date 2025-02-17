@@ -26,6 +26,13 @@ const AddingScreen = ({ route, navigation }: Props) => {
     const { addTask } = taskContext;
 
     const handleAddTask = () => {
+        if (title.trim() === '') {
+            Alert.alert(
+                'Error',
+                'Text input cannot be empty!'
+            );
+        }
+
         if (title.trim() !== '') {
             // Add tasks to context
             addTask(title);
